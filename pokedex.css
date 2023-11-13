@@ -1,0 +1,23 @@
+body {
+    margin: 25px;
+}
+
+.pokedex {
+    border: 2px solid black;
+    height: 50vh;
+    width: 20vw;
+    padding:15px;
+    text-align: center;
+}
+
+.sprite-box,
+.poke-info-box {
+    border: 1px solid black;
+    margin: 25px;
+    padding: 5px;
+}
+
+.search-button {
+    margin-top: 5px;
+}
+
