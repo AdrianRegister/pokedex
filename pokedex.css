@@ -4,8 +4,8 @@ body {
 
 .pokedex {
     border: 2px solid black;
-    height: 50vh;
-    width: 20vw;
+    height: auto;
+    width: 231.6px;
     padding:15px;
     text-align: center;
 }
@@ -21,3 +21,6 @@ body {
     margin-top: 5px;
 }
 
+h4 {
+    font-size: 1.3em;
+}
