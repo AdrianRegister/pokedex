@@ -12,6 +12,36 @@ spriteBox.setAttribute('class', 'sprite-box');
 const pokeInfoBox = document.createElement('p');
 pokeInfoBox.setAttribute('class', 'poke-info-box');
 
+const prevButton = document.createElement('button');
+prevButton.setAttribute('class', 'prev-button');
+prevButton.textContent = 'Previous';
+
+const nextButton = document.createElement('button');
+nextButton.setAttribute('class', 'next-button');
+nextButton.textContent = 'Next';
+
+let currentPokeId;
+
+prevButton.addEventListener('click', () => {
+    spriteBox.innerHTML = '';
+    pokeInfoBox.innerHTML = '';
+
+    currentPokeId -= 1;
+
+    getPokeSprite(currentPokeId);
+    getPokeSpeciesInfo(currentPokeId);
+})
+
+nextButton.addEventListener('click', () => {
+    spriteBox.innerHTML = '';
+    pokeInfoBox.innerHTML = '';
+
+    currentPokeId += 1;
+
+    getPokeSprite(currentPokeId);
+    getPokeSpeciesInfo(currentPokeId);
+})
+
 
 searchButton.addEventListener('click', () => {
     spriteBox.innerHTML = '';
@@ -20,6 +50,9 @@ searchButton.addEventListener('click', () => {
     pokedex.appendChild(pokeNameBox);
     pokedex.appendChild(spriteBox);
     pokedex.appendChild(pokeInfoBox);
+
+    pokedex.appendChild(prevButton);
+    pokedex.appendChild(nextButton);
 
     getPokeInfo(searchBar.value.toLowerCase())
 });
@@ -32,9 +65,14 @@ randomSearch.addEventListener('click', () => {
     pokedex.appendChild(spriteBox);
     pokedex.appendChild(pokeInfoBox);
 
+    pokedex.appendChild(prevButton);
+    pokedex.appendChild(nextButton);
+
     const randomNumber = randomPokeNumber();
     getPokeSprite(randomNumber);
     getPokeSpeciesInfo(randomNumber);
+
+    currentPokeId = randomNumber;
 })
 
 function randomPokeNumber() {
@@ -49,9 +87,9 @@ function getPokeInfo(name) {
     .then (response => response.json())
     .then (pokeInfo => {
         console.log(pokeInfo);
-        pokeNameBox.textContent = name[0].toUpperCase() + name.slice(1);
         getPokeSprite(pokeInfo.id)
         getPokeSpeciesInfo(pokeInfo.id)
+        currentPokeId = pokeInfo.id;
     })
 }
 
@@ -71,7 +109,8 @@ function getPokeSpeciesInfo(idNumber) {
         pokeNameBox.textContent = pokeInfo.name[0].toUpperCase() + pokeInfo.name.slice(1);
         for (entry of pokeInfo.flavor_text_entries) {
             if (entry.language.name === 'en' && entry.version.name === 'alpha-sapphire') {
-                pokeInfoBox.textContent = entry.flavor_text;                 
+                const flavorText = entry.flavor_text; 
+                pokeInfoBox.textContent = flavorText;                
             }
         }
     })
