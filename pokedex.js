@@ -59,6 +59,8 @@ nextButton.addEventListener('click', () => {
 
 
 searchButton.addEventListener('click', () => {
+    randomSearchCalled = false;
+
     spriteBox.innerHTML = '';
     pokeInfoBox.innerHTML = '';
     tableContainer.innerHTML = '';
