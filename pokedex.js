@@ -24,7 +24,7 @@ nextButton.setAttribute('class', 'next-button');
 nextButton.textContent = 'Next';
 
 let randomSearchCalled = false;
-let tableExist = false;
+let buttonClicked = false;
 let currentPokeId;
 const currentPokeStats = {
     HP: 5,
@@ -36,27 +36,30 @@ const currentPokeStats = {
 }
 
 prevButton.addEventListener('click', () => {
+    buttonClicked = true;
     spriteBox.innerHTML = '';
-    pokeInfoBox.innerHTML = '';
-    tableContainer.innerHTML = '';
 
-    currentPokeId -= 1;
-
-    getPokeSprite(currentPokeId);
-    getPokeSpeciesInfo(currentPokeId);
+    if (currentPokeId >= 2) {
+        pokeInfoBox.innerHTML = '';
+        tableContainer.innerHTML = '';
+        currentPokeId -= 1;
+        getPokeSprite(currentPokeId);
+        getPokeSpeciesInfo(currentPokeId);
+    }
 })
 
 nextButton.addEventListener('click', () => {
+    buttonClicked = true;
     spriteBox.innerHTML = '';
-    pokeInfoBox.innerHTML = '';
-    tableContainer.innerHTML = '';
 
-    currentPokeId += 1;
-
-    getPokeSprite(currentPokeId);
-    getPokeSpeciesInfo(currentPokeId);
+    if (currentPokeId <= 720) {
+        pokeInfoBox.innerHTML = '';
+        tableContainer.innerHTML = '';
+        currentPokeId += 1;
+        getPokeSprite(currentPokeId);
+        getPokeSpeciesInfo(currentPokeId);
+    }
 })
-
 
 searchButton.addEventListener('click', () => {
     randomSearchCalled = false;
@@ -71,9 +74,8 @@ searchButton.addEventListener('click', () => {
 
     pokedex.appendChild(prevButton);
     pokedex.appendChild(nextButton);
-
     pokedex.appendChild(tableContainer);
-
+    
     getPokeInfo(searchBar.value.toLowerCase())
 });
 
@@ -228,7 +230,7 @@ function getPokeSpeciesInfo(idNumber) {
             }
         }
 
-        if (randomSearchCalled) {
+        if (randomSearchCalled || buttonClicked) {
             getPokeInfoForRandom(pokeInfo.name);
         }        
     })
