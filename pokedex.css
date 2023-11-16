@@ -5,9 +5,28 @@ body {
 .pokedex {
     border: 2px solid black;
     height: auto;
-    width: 231.6px;
-    padding:15px;
+    width: 500px; /* alternate width: 231.6px  */
+    padding: 15px;
     text-align: center;
+}
+
+.search {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+}
+
+.search-button,
+.random-search {   
+    margin-top: 5px;
+}
+
+.random-search {
+    margin-left: 5px;
+}
+
+.search-bar {
+    width: 188px;
 }
 
 .sprite-box,
@@ -17,10 +36,29 @@ body {
     padding: 5px;
 }
 
-.search-button {
-    margin-top: 5px;
-}
-
 h4 {
     font-size: 1.3em;
+}
+
+.stats-table {
+    margin-top: 5px;
+    border: none;
+}
+
+.stat-name-cell {
+    text-align: right;
+    padding-right: 5px;
+    border-right: 1px solid black;
+}
+
+.stat-value-cell {
+    text-align: left;
+    margin-left: 5px;
+    font-weight: bold;
+}
+
+.total-cell {
+    text-align: center;
+    border: none;
+    width: 350px;
 }

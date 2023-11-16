@@ -12,6 +12,9 @@ spriteBox.setAttribute('class', 'sprite-box');
 const pokeInfoBox = document.createElement('p');
 pokeInfoBox.setAttribute('class', 'poke-info-box');
 
+const tableContainer = document.createElement('div');
+tableContainer.setAttribute('class', 'stats-table');
+
 const prevButton = document.createElement('button');
 prevButton.setAttribute('class', 'prev-button');
 prevButton.textContent = 'Previous';
@@ -21,6 +24,14 @@ nextButton.setAttribute('class', 'next-button');
 nextButton.textContent = 'Next';
 
 let currentPokeId;
+const currentPokeStats = {
+    HP: 5,
+    Attack: 5,
+    Defense: 5,
+    'Special Attack': 5,
+    'Special Defence': 5,
+    Speed: 5
+}
 
 prevButton.addEventListener('click', () => {
     spriteBox.innerHTML = '';
@@ -46,6 +57,7 @@ nextButton.addEventListener('click', () => {
 searchButton.addEventListener('click', () => {
     spriteBox.innerHTML = '';
     pokeInfoBox.innerHTML = '';
+    tableContainer.innerHTML = '';
 
     pokedex.appendChild(pokeNameBox);
     pokedex.appendChild(spriteBox);
@@ -53,6 +65,8 @@ searchButton.addEventListener('click', () => {
 
     pokedex.appendChild(prevButton);
     pokedex.appendChild(nextButton);
+
+    pokedex.appendChild(tableContainer);
 
     getPokeInfo(searchBar.value.toLowerCase())
 });
@@ -75,6 +89,72 @@ randomSearch.addEventListener('click', () => {
     currentPokeId = randomNumber;
 })
 
+function showPokeStats(statObject) {
+    const table = document.createElement('table');
+    let statTotal = 0;
+
+    for (let i = 0, j = 0; i < 6; i++, j++) {
+        const statName = Object.keys(statObject)[j];
+        const statValue = Object.values(statObject)[j];
+
+        statTotal += statValue;
+
+        const tableRow = document.createElement('tr');
+        tableRow.setAttribute('class', 'stat-row');
+        const tableCellOne = document.createElement('td');
+        tableCellOne.setAttribute('class', 'stat-name-cell');
+        const tableCellTwo = document.createElement('td');
+        tableCellTwo.setAttribute('class', 'stat-value-cell');
+
+        tableCellOne.textContent = statName;
+        tableCellTwo.textContent = statValue;
+
+        tableRow.appendChild(tableCellOne);
+        tableRow.appendChild(tableCellTwo);
+        table.appendChild(tableRow);
+    }
+
+    const totalValueName = document.createElement('td');
+    totalValueName.setAttribute('class', 'stat-name-cell');
+    totalValueName.textContent = 'Total';
+
+    const totalValue = document.createElement('td');
+    totalValue.setAttribute('class', 'total-cell');
+    totalValue.textContent = statTotal;
+
+    const totalRow = document.createElement('tr');
+    totalRow.setAttribute('class', 'stat-row');
+
+    totalRow.appendChild(totalValueName);
+    totalRow.appendChild(totalValue);
+
+    table.appendChild(totalRow);
+
+    tableContainer.appendChild(table);
+    fillStatBar(Object.values(statObject));
+}
+
+function fillStatBar(values) {
+    const statBars = document.querySelectorAll('.stat-value-cell');
+
+    statBars.forEach((statBar, i) => {
+        const total = 255;
+        const percentOfFull = (values[i] / total).toFixed(2);
+
+        if (percentOfFull < 0.2) {
+            statBar.style.background = `linear-gradient(90deg, red ${percentOfFull * 100}%, white ${percentOfFull * 100}%`;
+        } else if (percentOfFull < 0.4) {
+            statBar.style.background = `linear-gradient(90deg, orange ${percentOfFull * 100}%, white ${percentOfFull * 100}%`;
+        } else if (percentOfFull < 0.6) {
+            statBar.style.background = `linear-gradient(90deg, yellow ${percentOfFull * 100}%, white ${percentOfFull * 100}%`;
+        } else if (percentOfFull < 0.8) {
+            statBar.style.background = `linear-gradient(90deg, lightgreen ${percentOfFull * 100}%, white ${percentOfFull * 100}%`;
+        } else {
+            statBar.style.background = `linear-gradient(90deg, aqua ${percentOfFull * 100}%, white ${percentOfFull * 100}%`;
+        }   
+    });
+}
+
 function randomPokeNumber() {
     const min = 1;
     const max = 721;
@@ -90,6 +170,13 @@ function getPokeInfo(name) {
         getPokeSprite(pokeInfo.id)
         getPokeSpeciesInfo(pokeInfo.id)
         currentPokeId = pokeInfo.id;
+
+        for (i = 0; i < Object.keys(currentPokeStats).length; i++) {
+            const statName = Object.keys(currentPokeStats)[i];
+            currentPokeStats[statName] = pokeInfo.stats[i].base_stat;
+        }
+
+        showPokeStats(currentPokeStats);
     })
 }
 
