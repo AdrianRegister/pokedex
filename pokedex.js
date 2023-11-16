@@ -25,6 +25,7 @@ nextButton.textContent = 'Next';
 
 let randomSearchCalled = false;
 let buttonClicked = false;
+
 let currentPokeId;
 const currentPokeStats = {
     HP: 5,
@@ -176,6 +177,8 @@ function randomPokeNumber() {
 }
 
 function getPokeInfo(name) {
+    buttonClicked = false;
+
     fetch(`https://pokeapi.co/api/v2/pokemon/${name}`)
     .then (response => response.json())
     .then (pokeInfo => {
