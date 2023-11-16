@@ -23,6 +23,8 @@ const nextButton = document.createElement('button');
 nextButton.setAttribute('class', 'next-button');
 nextButton.textContent = 'Next';
 
+let randomSearchCalled = false;
+let tableExist = false;
 let currentPokeId;
 const currentPokeStats = {
     HP: 5,
@@ -36,6 +38,7 @@ const currentPokeStats = {
 prevButton.addEventListener('click', () => {
     spriteBox.innerHTML = '';
     pokeInfoBox.innerHTML = '';
+    tableContainer.innerHTML = '';
 
     currentPokeId -= 1;
 
@@ -46,6 +49,7 @@ prevButton.addEventListener('click', () => {
 nextButton.addEventListener('click', () => {
     spriteBox.innerHTML = '';
     pokeInfoBox.innerHTML = '';
+    tableContainer.innerHTML = '';
 
     currentPokeId += 1;
 
@@ -72,8 +76,11 @@ searchButton.addEventListener('click', () => {
 });
 
 randomSearch.addEventListener('click', () => {
+    randomSearchCalled = true;
+
     spriteBox.innerHTML = '';
     pokeInfoBox.innerHTML = '';
+    tableContainer.innerHTML = '';
 
     pokedex.appendChild(pokeNameBox);
     pokedex.appendChild(spriteBox);
@@ -81,6 +88,8 @@ randomSearch.addEventListener('click', () => {
 
     pokedex.appendChild(prevButton);
     pokedex.appendChild(nextButton);
+
+    pokedex.appendChild(tableContainer);
 
     const randomNumber = randomPokeNumber();
     getPokeSprite(randomNumber);
@@ -180,6 +189,22 @@ function getPokeInfo(name) {
     })
 }
 
+function getPokeInfoForRandom(name) {
+    fetch(`https://pokeapi.co/api/v2/pokemon/${name}`)
+    .then (response => response.json())
+    .then (pokeInfo => {
+        console.log(pokeInfo);
+        currentPokeId = pokeInfo.id;
+
+        for (i = 0; i < Object.keys(currentPokeStats).length; i++) {
+            const statName = Object.keys(currentPokeStats)[i];
+            currentPokeStats[statName] = pokeInfo.stats[i].base_stat;
+        }
+
+        showPokeStats(currentPokeStats);
+    })
+}
+
 function getPokeSprite(idNumber) {
     fetch(`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${idNumber}.png`)
     .then (response => response.blob())
@@ -200,5 +225,9 @@ function getPokeSpeciesInfo(idNumber) {
                 pokeInfoBox.textContent = flavorText;                
             }
         }
+
+        if (randomSearchCalled) {
+            getPokeInfoForRandom(pokeInfo.name);
+        }        
     })
 }
