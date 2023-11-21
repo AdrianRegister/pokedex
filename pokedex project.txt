@@ -1,0 +1,4 @@
+pokedex to do:
+
+add pokemon number to display.
+add pokemon type to display
